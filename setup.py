@@ -107,7 +107,7 @@ setup(
     entry_points={
         "console_scripts": [
             "awssh = ssm_ssh.ssm_ssh:main",
-            "awssh-completer = ssm_ssh.autocompleter:main",
+            "_awssh-completer = ssm_ssh.autocompleter:main",
         ]
     },
 )
