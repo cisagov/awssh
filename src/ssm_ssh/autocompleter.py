@@ -215,8 +215,11 @@ def print_completions(comps: set[str], cur: str) -> None:
             contains.append(i)
     log(f"starts with: {starts}")
     log(f"contains: {contains}")
-    # prefer completions that start than contain
-    for i in starts or contains:
+    # Prefer completions in this order:
+    # 1. completions that start with the current word
+    # 2. completions that contain the current word
+    # 3. other candidates that matched some other way (e.g., by instance name)
+    for i in starts or contains or comps:
         print(i)
 
 
