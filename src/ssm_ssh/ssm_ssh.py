@@ -90,6 +90,9 @@ def main() -> int:
     else:
         ssh_args: list[str] = []
 
+    if os.environ.get("AWSSH_USER"):
+        ssh_args.append(f'-o User={os.environ["AWSSH_USER"]}')
+
     # Set up logging
     logging.basicConfig(
         format="%(asctime)-15s %(levelname)s %(message)s", level=log_level.upper()
