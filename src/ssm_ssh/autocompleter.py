@@ -59,7 +59,9 @@ def get_profiles(cred_filename: Path, filter: str = "startstopssm") -> set[str]:
     return result
 
 
-def get_instances(credential_file: Path, profile: str, region: str) -> set[str]:
+def get_instances(
+    credential_file: Path, profile: str, region: str
+) -> set[tuple[str, str]]:
     # Create session
     # boto3 doesn't have a programatic way to set the credential file. yuck.
     os.environ["AWS_SHARED_CREDENTIALS_FILE"] = str(credential_file)
@@ -71,9 +73,9 @@ def get_instances(credential_file: Path, profile: str, region: str) -> set[str]:
         i.tag_dict = {tag["Key"]: tag["Value"] for tag in i.tags}
         instances[i.tag_dict["Name"]] = i
 
-    result: set[str] = set()
+    result: set[tuple[str, str]] = set()
     for name, instance in instances.items():
-        result.add(f"{instance.id} {name}")
+        result.add((instance.id, name))
     return result
 
 
@@ -81,7 +83,7 @@ def build_option_candidates(word_set: set[str]) -> set[str]:
     candidates = set()
     if HELP_OPTIONS & word_set:
         return candidates
-    if len(word_set) <= 1:  # TODO not quite right
+    if len(word_set) <= 1:
         candidates |= HELP_OPTIONS
     if not CREDENTIALS_OPTIONS & word_set:
         candidates |= CREDENTIALS_OPTIONS
@@ -109,7 +111,7 @@ class ParsedState(object):
 def parse_command_line(words: list[str]) -> ParsedState:
     state: ParsedState = ParsedState()
     pos_args: list[str] = []
-    i = iter(words[:-1])  # TODO skip last word, messes up ssh_command
+    i = iter(words[:-1])
     try:
         while True:
             word = next(i)
@@ -189,16 +191,28 @@ def autocomplete(command_line: str, command_index: int) -> int:
 
             # If we have enough information suggest instance ids and names
             if not state.instance and state.profile in profiles:
-                instances = get_instances(
+                instances: set[tuple[str, str]] = get_instances(
                     state.cred_file, state.profile, state.aws_region
                 )
+                instance_id_and_name: set[str] = {f"{i[0]} {i[1]}" for i in instances}
+                instance_names: set[str] = {i[1] for i in instances}
+                log(f"NAMES: {instance_names}")
+
+                # Is the user trying to type a name, if so include the names
+                for i in instance_names:
+                    if cur_word in i:
+                        candidates |= instance_names
+                        break
+
                 # Filter instances now so we can strip off the name if there is only one
-                instances = {i for i in instances if cur_word in i}
-                if len(instances) == 1:
+                filtered_id_and_name = {
+                    i for i in instance_id_and_name if cur_word in i
+                }
+                if len(filtered_id_and_name) == 1:
                     # If there is only one matching instance, remove the Name suffix
-                    candidates = {instances.pop().split()[0]}
+                    candidates = {filtered_id_and_name.pop().split()[0]}
                 else:
-                    candidates |= instances
+                    candidates |= instance_id_and_name
 
     print_completions(candidates, cur_word)
     return 0
