@@ -194,15 +194,13 @@ def autocomplete(command_line: str, command_index: int) -> int:
                 instances: set[tuple[str, str]] = get_instances(
                     state.cred_file, state.profile, state.aws_region
                 )
+                # Build sets of id-name pairs, and names alone
                 instance_id_and_name: set[str] = {f"{i[0]} {i[1]}" for i in instances}
                 instance_names: set[str] = {i[1] for i in instances}
-                log(f"NAMES: {instance_names}")
 
-                # Is the user trying to type a name, if so include the names
-                for i in instance_names:
-                    if cur_word in i:
-                        candidates |= instance_names
-                        break
+                # Include the names alone.  They will be substituted with an
+                # instance id when only one candidate is left.
+                candidates |= instance_names
 
                 # Filter instances now so we can strip off the name if there is only one
                 filtered_id_and_name = {
