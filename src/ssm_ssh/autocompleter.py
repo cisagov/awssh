@@ -5,6 +5,7 @@ import configparser
 import io
 import os
 from pathlib import Path
+import re
 import shlex
 
 # Third-Party Libraries
@@ -48,13 +49,14 @@ def get_regions() -> set[str]:
     return set(session.get_available_regions("ec2"))
 
 
-# TODO: make the filter configurable, environment variable?
-def get_profiles(cred_filename: Path, filter: str = "startstopssm") -> set[str]:
+def get_profiles(cred_filename: Path, filter: None) -> set[str]:
+    if filter:
+        filter = re.compile(filter)
     config = configparser.ConfigParser()
     config.read(cred_filename)
     result: set[str] = set()
     for section in config.sections():
-        if filter in section:
+        if not filter or filter.search(section):
             result.add(section)
     return result
 
@@ -185,7 +187,8 @@ def autocomplete(command_line: str, command_index: int) -> int:
 
         # If we have enough optional information start suggesting positional parameters
         if state.cred_file.is_file() and state.aws_region:
-            profiles = get_profiles(state.cred_file)
+            profile_filter = os.environ.get("AWSSH_PROFILE_FILTER")
+            profiles = get_profiles(state.cred_file, profile_filter)
             if not state.profile in profiles:
                 candidates |= profiles
 
