@@ -5,7 +5,8 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/ssm-ssh.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ssm-ssh/alerts/)
 [![Known Vulnerabilities](https://snyk.io/test/github/cisagov/ssm-ssh/develop/badge.svg)](https://snyk.io/test/github/cisagov/ssm-ssh)
 
-This project implements a tool that simplifies secure shell connections over AWS simple systems manager.
+This project implements a tool that simplifies secure shell connections over AWS
+simple systems manager.
 
 ## Usage ##
 
@@ -13,7 +14,15 @@ This project implements a tool that simplifies secure shell connections over AWS
 
 1. Install the `awssh` command line utility.
 
-1. Source the [`awssh-completion.bash`](tools/awssh-completion.bash) file in your `bash` environment.
+1. Define environment variables:
+
+    ```bash
+    export AWSSH_PROFILE_FILTER="startstopssmsession"
+    export AWSSH_USER="lemmy.kilmister"
+    ```
+
+1. Source the [`awssh-completion.bash`](tools/awssh-completion.bash) file in
+   your `bash` environment.
 
 1. Profit!
 
