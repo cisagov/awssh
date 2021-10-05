@@ -72,7 +72,12 @@ def get_instances(
     instances = {}
     for i in ec2.instances.all():
         # convert tags into a proper dictionary
-        i.tag_dict = {tag["Key"]: tag["Value"] for tag in i.tags}
+        if i.tags is None:
+            # if an instance has no tags use the id as the Name
+            log(f"warning: instance does not have tags: {i}")
+            i.tag_dict = {"Name": i.id}
+        else:
+            i.tag_dict = {tag["Key"]: tag["Value"] for tag in i.tags}
         instances[i.tag_dict["Name"]] = i
 
     result: set[tuple[str, str]] = set()
