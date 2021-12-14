@@ -1,5 +1,5 @@
 """
-This is the setup module for the ssm-ssh project.
+This is the setup module for the awssh project.
 
 Based on:
 
@@ -42,10 +42,10 @@ def get_version(version_file):
 
 
 setup(
-    name="ssm-ssh",
+    name="awssh",
     # Versions should comply with PEP440
     version=get_version("src/ssm_ssh/_version.py"),
-    description="ssm-ssh tool",
+    description="awssh tool",
     long_description=readme(),
     long_description_content_type="text/markdown",
     # Landing page for CISA's cybersecurity mission
@@ -53,8 +53,8 @@ setup(
     # Additional URLs for this project per
     # https://packaging.python.org/guides/distributing-packages-using-setuptools/#project-urls
     project_urls={
-        "Source": "https://github.com/cisagov/ssm-ssh",
-        "Tracker": "https://github.com/cisagov/ssm-ssh/issues",
+        "Source": "https://github.com/cisagov/awssh",
+        "Tracker": "https://github.com/cisagov/awssh/issues",
     },
     # Author details
     author="Cybersecurity and Infrastructure Security Agency",
@@ -103,7 +103,7 @@ setup(
             "pytest",
         ]
     },
-    # Conveniently allows one to run the CLI tool as `ssm-ssh`
+    # Conveniently allows one to run the CLI tool as `awssh`
     entry_points={
         "console_scripts": [
             "awssh = ssm_ssh.ssm_ssh:main",

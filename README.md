@@ -1,8 +1,8 @@
-# ssm-ssh ☁️🔒🐚 #
+# awssh ☁️🔒🐚 #
 
-[![GitHub Build Status](https://github.com/cisagov/ssm-ssh/workflows/build/badge.svg)](https://github.com/cisagov/ssm-ssh/actions)
-[![CodeQL](https://github.com/cisagov/ssm-ssh/workflows/CodeQL/badge.svg)](https://github.com/cisagov/ssm-ssh/actions/workflows/codeql-analysis.yml)
-[![Coverage Status](https://coveralls.io/repos/github/cisagov/ssm-ssh/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/ssm-ssh?branch=develop)
+[![GitHub Build Status](https://github.com/cisagov/awssh/workflows/build/badge.svg)](https://github.com/cisagov/awssh/actions)
+[![CodeQL](https://github.com/cisagov/awssh/workflows/CodeQL/badge.svg)](https://github.com/cisagov/awssh/actions/workflows/codeql-analysis.yml)
+[![Coverage Status](https://coveralls.io/repos/github/cisagov/awssh/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/awssh?branch=develop)
 
 This project implements a tool that simplifies secure shell connections over AWS
 simple systems manager.
