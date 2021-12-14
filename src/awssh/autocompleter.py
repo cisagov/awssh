@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 import shlex
+from typing import Optional, TextIO
 
 # Third-Party Libraries
 import boto3
@@ -25,10 +26,9 @@ if os.environ.get("LC_CTYPE", "") == "UTF-8":
 
 # Debugging the completer can be touchy since standard out goes to bash.
 # Set the environment below to a filename to enable logging.
+LOG_FILE: Optional[TextIO] = None
 if filename := os.environ.get("BASH_COMP_DEBUG_FILE"):
-    LOG_FILE: io.TextIOWrapper = open(filename, "a")
-else:
-    LOG_FILE: io.TextIOWrapper = None
+    LOG_FILE = open(filename, "a")
 
 
 def log(message: str) -> None:
@@ -49,14 +49,14 @@ def get_regions() -> set[str]:
     return set(session.get_available_regions("ec2"))
 
 
-def get_profiles(cred_filename: Path, filter: None) -> set[str]:
+def get_profiles(cred_filename: Path, filter: Optional[str] = None) -> set[str]:
     if filter:
-        filter = re.compile(filter)
+        filter_re: re.Pattern[str] = re.compile(filter)
     config = configparser.ConfigParser()
     config.read(cred_filename)
     result: set[str] = set()
     for section in config.sections():
-        if not filter or filter.search(section):
+        if not filter_re or filter_re.search(section):
             result.add(section)
     return result
 
@@ -87,7 +87,7 @@ def get_instances(
 
 
 def build_option_candidates(word_set: set[str]) -> set[str]:
-    candidates = set()
+    candidates: set[str] = set()
     if HELP_OPTIONS & word_set:
         return candidates
     if len(word_set) <= 1:
@@ -112,7 +112,7 @@ class ParsedState(object):
         self.instance: str = None
         self.profile: str = None  # os.environ.get("AWS_PROFILE")
         self.ssh_args: str = None
-        self.ssh_command: str = None
+        self.ssh_command: list[str] = None
 
 
 def parse_command_line(words: list[str]) -> ParsedState:
@@ -256,3 +256,4 @@ def main() -> int:
         # If the user hits Ctrl+C, we don't want to print
         # a traceback to the user.
         pass
+    return 0

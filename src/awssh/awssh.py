@@ -21,16 +21,6 @@ Options:
   -h --help                     Show this message.
 """
 
-# Options required for ssh to use ssm
-# We will construct this for the user so they don't have to have it in their ssh config
-# Note: They will probably still want to specify their own "User" option.
-DEFAULT_SSH_OPTIONS = {
-    "GSSAPIAuthentication": "yes",
-    "GSSAPIDelegateCredentials": "yes",
-    "ProxyCommand": """sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'" """,
-    "StrictHostKeyChecking": "no",
-    "UserKnownHostsFile": "/dev/null",
-}
 
 # Standard Python Libraries
 import logging
@@ -46,6 +36,17 @@ from schema import And, Schema, SchemaError, Use
 
 from . import CREDENTIAL_DIR
 from ._version import __version__
+
+# Options required for ssh to use ssm
+# We will construct this for the user so they don't have to have it in their ssh config
+# Note: They will probably still want to specify their own "User" option.
+DEFAULT_SSH_OPTIONS = {
+    "GSSAPIAuthentication": "yes",
+    "GSSAPIDelegateCredentials": "yes",
+    "ProxyCommand": """sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'" """,
+    "StrictHostKeyChecking": "no",
+    "UserKnownHostsFile": "/dev/null",
+}
 
 
 def main() -> int:
@@ -75,20 +76,18 @@ def main() -> int:
 
     # Assign validated arguments to variables
     command: list[str] = validated_args["<command>"]
+    credential_file: Optional[Path] = None
     if validated_args["--credentials"]:
-        credential_file: Optional[Path] = CREDENTIAL_DIR / Path(
-            validated_args["--credentials"]
-        )
-    else:
-        credential_file: Optional[Path] = None
+        credential_file = CREDENTIAL_DIR / Path(validated_args["--credentials"])
     instance_id: str = validated_args["<instance-id>"]
     log_level: str = validated_args["--log-level"]
     profile: str = validated_args["<profile>"]
     region: str = validated_args["--region"]
+    ssh_args: list[str]
     if validated_args["--ssh-args"]:
-        ssh_args: list[str] = validated_args["--ssh-args"].split()
+        ssh_args = validated_args["--ssh-args"].split()
     else:
-        ssh_args: list[str] = []
+        ssh_args = []
 
     if os.environ.get("AWSSH_USER"):
         ssh_args.append(f'-o User={os.environ["AWSSH_USER"]}')
@@ -111,7 +110,7 @@ def run_subprocess(
     credential_file: Optional[Path],
     profile: str,
     region: Optional[str],
-    instanceid: str,
+    instance_id: str,
     ssh_args: list[str],
     remote_command: list[str],
 ) -> int:
@@ -126,7 +125,7 @@ def run_subprocess(
         ["ssh"]
         + [f"-o {key}={value}" for key, value in DEFAULT_SSH_OPTIONS.items()]
         + ssh_args
-        + [instanceid]
+        + [instance_id]
         + remote_command
     )
     if logging.getLogger().isEnabledFor(
