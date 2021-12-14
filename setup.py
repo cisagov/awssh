@@ -44,7 +44,7 @@ def get_version(version_file):
 setup(
     name="awssh",
     # Versions should comply with PEP440
-    version=get_version("src/ssm_ssh/_version.py"),
+    version=get_version("src/awssh/_version.py"),
     description="awssh tool",
     long_description=readme(),
     long_description_content_type="text/markdown",
@@ -106,8 +106,8 @@ setup(
     # Conveniently allows one to run the CLI tool as `awssh`
     entry_points={
         "console_scripts": [
-            "awssh = ssm_ssh.ssm_ssh:main",
-            "_awssh-completer = ssm_ssh.autocompleter:main",
+            "awssh = awssh.awssh:main",
+            "_awssh-completer = awssh.autocompleter:main",
         ]
     },
 )
