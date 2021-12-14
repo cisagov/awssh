@@ -97,7 +97,7 @@ def main() -> int:
         format="%(asctime)-15s %(levelname)s %(message)s", level=log_level.upper()
     )
 
-    returncode: int = run_subprocess(
+    returncode: int = _run_subprocess(
         credential_file, profile, region, instance_id, ssh_args, command
     )
 
@@ -106,7 +106,7 @@ def main() -> int:
     return returncode
 
 
-def run_subprocess(
+def _run_subprocess(
     credential_file: Optional[Path],
     profile: str,
     region: Optional[str],
