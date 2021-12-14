@@ -1,9 +1,8 @@
 # ssm-ssh ☁️🔒🐚 #
 
 [![GitHub Build Status](https://github.com/cisagov/ssm-ssh/workflows/build/badge.svg)](https://github.com/cisagov/ssm-ssh/actions)
+[![CodeQL](https://github.com/cisagov/ssm-ssh/workflows/CodeQL/badge.svg)](https://github.com/cisagov/ssm-ssh/actions/workflows/codeql-analysis.yml)
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/ssm-ssh/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/ssm-ssh?branch=develop)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/ssm-ssh.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ssm-ssh/alerts/)
-[![Known Vulnerabilities](https://snyk.io/test/github/cisagov/ssm-ssh/develop/badge.svg)](https://snyk.io/test/github/cisagov/ssm-ssh)
 
 This project implements a tool that simplifies secure shell connections over AWS
 simple systems manager.
