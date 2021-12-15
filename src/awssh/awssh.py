@@ -26,7 +26,7 @@ Options:
 import logging
 import os
 from pathlib import Path
-import subprocess
+import subprocess  # nosec: B404 subprocess use is required for this tool
 import sys
 from typing import Any, Dict, Optional
 
@@ -136,5 +136,9 @@ def _run_subprocess(
             + str([f"{key}={os.environ[key]}" for key in sorted(os.environ)])
         )
         logging.debug(f"command: {command}")
-    completed_process = subprocess.run(args=command, env=ssh_env)
+    completed_process = (
+        subprocess.run(  # nosec: B603 subprocess input is carefully validated
+            args=command, env=ssh_env
+        )
+    )
     return completed_process.returncode
