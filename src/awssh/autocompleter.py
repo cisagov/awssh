@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
+"""AWS SSH autocompleter script."""
 
 # Standard Python Libraries
 import configparser
-import io
 import os
 from pathlib import Path
 import re
@@ -32,12 +32,22 @@ if filename := os.environ.get("BASH_COMP_DEBUG_FILE"):
 
 
 def log(message: str) -> None:
+    """Log a message to the log file if it is open.
+
+    Args:
+        message (str): The message to log.
+    """
     if LOG_FILE:
         print(message, file=LOG_FILE)
 
 
 def get_cred_files() -> set[str]:
-    result = set()
+    """Return a set of all credential files in the credential directory.
+
+    Returns:
+        set[str]: A set of all credential files in the credential directory.
+    """
+    result: set[str] = set()
     for i in CREDENTIAL_DIR.iterdir():
         if i.is_file():
             result.add(i.name)
@@ -45,11 +55,25 @@ def get_cred_files() -> set[str]:
 
 
 def get_regions() -> set[str]:
+    """Return a set of all available AWS regions.
+
+    Returns:
+        set[str]: A set of all available AWS regions.
+    """
     session = boto3.session.Session(region_name="us-east-1")
     return set(session.get_available_regions("ec2"))
 
 
 def get_profiles(cred_filename: Path, filter: Optional[str] = None) -> set[str]:
+    """Return a set of profiles within a credential file that match the filter.
+
+    Args:
+        cred_filename (Path): The path to the credential file.
+        filter (Optional[str], optional): Regular expression to match profile names. Defaults to None.
+
+    Returns:
+        set[str]: A set of profiles within a credential file that match the filter.
+    """
     if filter:
         filter_re: re.Pattern[str] = re.compile(filter)
     config = configparser.ConfigParser()
@@ -64,13 +88,26 @@ def get_profiles(cred_filename: Path, filter: Optional[str] = None) -> set[str]:
 def get_instances(
     credential_file: Path, profile: str, region: str
 ) -> set[tuple[str, str]]:
+    """Return a set of instances and names that match the profile and region.
+
+    Args:
+        credential_file (Path): The path to the credential file.
+        profile (str): The profile to use.
+        region (str): The AWS region to use.
+
+    Returns:
+        set[tuple[str, str]]: A set of instances and names that match the profile and region.
+    """
     # Create session
     # boto3 doesn't have a programatic way to set the credential file. yuck.
     os.environ["AWS_SHARED_CREDENTIALS_FILE"] = str(credential_file)
     session = boto3.session.Session(region_name=region, profile_name=profile)
     ec2 = session.resource("ec2")
     instances = {}
-    for i in ec2.instances.all():
+    # Loop through instances that are running
+    for i in ec2.instances.filter(
+        Filters=[{"Name": "instance-state-name", "Values": ["running"]}]
+    ):
         # convert tags into a proper dictionary
         if i.tags is None:
             # if an instance has no tags use the id as the Name
@@ -87,6 +124,14 @@ def get_instances(
 
 
 def build_option_candidates(word_set: set[str]) -> set[str]:
+    """Return a set of command line option candidates for the given word set.
+
+    Args:
+        word_set (set[str]): The set of words to build option candidates for.
+
+    Returns:
+        set[str]: A set of command line option candidates for the given word set.
+    """
     candidates: set[str] = set()
     if HELP_OPTIONS & word_set:
         return candidates
@@ -104,7 +149,10 @@ def build_option_candidates(word_set: set[str]) -> set[str]:
 
 
 class ParsedState(object):
+    """A class to hold the state of the command line parser."""
+
     def __init__(self):
+        """Initialize the ParsedState object."""
         self.aws_region: str = os.environ.get("AWS_REGION")
         self.cred_file: Path = Path(
             os.environ.get("AWS_SHARED_CREDENTIALS_FILE", DEFAULT_CREDENTIAL_FILE)
@@ -116,6 +164,14 @@ class ParsedState(object):
 
 
 def parse_command_line(words: list[str]) -> ParsedState:
+    """Parse the command line and return the parsed state.
+
+    Args:
+        words (list[str]): The command line words to parse.
+
+    Returns:
+        ParsedState: The parsed state.
+    """
     state: ParsedState = ParsedState()
     pos_args: list[str] = []
     i = iter(words[:-1])
@@ -146,6 +202,15 @@ def parse_command_line(words: list[str]) -> ParsedState:
 def process_command_line(
     command_line: str, command_index: int
 ) -> tuple[list[str], str, str]:
+    """Process the command line and return the command line words, the command, and the command index.
+
+    Args:
+        command_line (str): The command line to process.
+        command_index (int): The index of the current command in the command line.
+
+    Returns:
+        tuple[list[str], str, str]: The command line words, the command, and the command index.
+    """
     # Chop the command line at the current cursor location
     command_line = command_line[:command_index]
     log(f"chopped command line is: {command_line}")
@@ -161,7 +226,16 @@ def process_command_line(
     return words, cur_word, prev_word
 
 
-def autocomplete(command_line: str, command_index: int) -> int:
+def autocomplete(command_line: str, command_index: int) -> tuple[set[str], str]:
+    """Autocomplete the command line and return the autocomplete set and the current word.
+
+    Args:
+        command_line (str): The command line to autocomplete.
+        command_index (int): The index of the current command in the command line.
+
+    Returns:
+        tuple(set[str], str): The autocomplete set and the current word.
+    """
     log("-" * 40)
     log(f"command_line is {command_line}, command_index is {command_index}")
     words: list[str]
@@ -194,7 +268,7 @@ def autocomplete(command_line: str, command_index: int) -> int:
         if state.cred_file.is_file() and state.aws_region:
             profile_filter = os.environ.get("AWSSH_PROFILE_FILTER")
             profiles = get_profiles(state.cred_file, profile_filter)
-            if not state.profile in profiles:
+            if state.profile not in profiles:
                 candidates |= profiles
 
             # If we have enough information suggest instance ids and names
@@ -220,11 +294,16 @@ def autocomplete(command_line: str, command_index: int) -> int:
                 else:
                     candidates |= instance_id_and_name
 
-    print_completions(candidates, cur_word)
-    return 0
+    return candidates, cur_word
 
 
 def print_completions(comps: set[str], cur: str) -> None:
+    """Output the completions to stdout.
+
+    Args:
+        comps (set[str]): The completions to output.
+        cur (str): The current word.
+    """
     log(f"completions: {sorted(comps)}")
     contains: list[str] = list()
     starts: list[str] = list()
@@ -244,6 +323,11 @@ def print_completions(comps: set[str], cur: str) -> None:
 
 
 def main() -> int:
+    """Execute main entry point for the awssh autocomplete script.
+
+    Returns:
+        int: The exit code.
+    """
     # bash exports COMP_LINE and COMP_POINT, tcsh COMMAND_LINE only
     command_line: str = (
         os.environ.get("COMP_LINE") or os.environ.get("COMMAND_LINE") or ""
@@ -251,7 +335,11 @@ def main() -> int:
     command_index: int = int(os.environ.get("COMP_POINT") or len(command_line))
 
     try:
-        autocomplete(command_line, command_index)
+        candidates: set[str]
+        cur_word: str
+        candidates, cur_word = autocomplete(command_line, command_index)
+
+        print_completions(candidates, cur_word)
     except KeyboardInterrupt:
         # If the user hits Ctrl+C, we don't want to print
         # a traceback to the user.
