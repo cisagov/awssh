@@ -31,7 +31,10 @@ from typing import Any, Dict, Optional
 
 # Third-Party Libraries
 import docopt
-from schema import And, Schema, SchemaError, Use
+
+# I cannot find a package that includes type stubs for schema, so I must add
+# "type: ignore" to tell mypy to ignore this library
+from schema import And, Schema, SchemaError, Use  # type: ignore
 
 from . import CREDENTIAL_DIR
 from ._version import __version__
