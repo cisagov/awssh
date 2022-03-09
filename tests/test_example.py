@@ -8,10 +8,8 @@ import sys
 from unittest.mock import patch
 
 # Third-Party Libraries
-import pytest
-
-# cisagov Libraries
 import example
+import pytest
 
 div_params = [
     (1, 1, 1),
@@ -53,7 +51,7 @@ def test_running_as_module(capsys):
             # being done by __main__ is importing the main entrypoint of the
             # package and running it, so there is nothing to use from this
             # import. As a result, we can safely ignore this warning.
-            # cisagov Libraries
+            # Third-Party Libraries
             import example.__main__  # noqa: F401
     captured = capsys.readouterr()
     assert (
