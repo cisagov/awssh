@@ -13,6 +13,7 @@ Usage:
 
 Options:
   -c --credentials=FILENAME     Shared credentials file name.
+  -n --no-ssh                   Open an SSM shell session without using ssh.
   -r --region=REGION            AWS region name to use.
   -s --ssh-args=ARGUMENTS       Arguments to send to ssh.
   --log-level=LEVEL             If specified, then the log level will be set to
@@ -50,7 +51,7 @@ DEFAULT_SSH_OPTIONS = {
 
 
 def main() -> int:
-    """Set up logging and prepare and ssh command."""
+    """Set up logging and prepare and SSM/ssh command."""
     args: Dict[str, str] = docopt.docopt(__doc__, version=__version__)
 
     # Validate and convert arguments as needed
@@ -81,6 +82,7 @@ def main() -> int:
         credential_file = CREDENTIAL_DIR / Path(validated_args["--credentials"])
     instance_id: str = validated_args["<instance-id>"]
     log_level: str = validated_args["--log-level"]
+    no_ssh: bool = validated_args["--no-ssh"]
     profile: str = validated_args["<profile>"]
     region: str = validated_args["--region"]
     ssh_args: list[str]
@@ -98,7 +100,7 @@ def main() -> int:
     )
 
     returncode: int = _run_subprocess(
-        credential_file, profile, region, instance_id, ssh_args, command
+        credential_file, profile, region, instance_id, no_ssh, ssh_args, command
     )
 
     # Stop logging and clean up
@@ -111,23 +113,31 @@ def _run_subprocess(
     profile: str,
     region: Optional[str],
     instance_id: str,
+    no_ssh: bool,
     ssh_args: list[str],
     remote_command: list[str],
 ) -> int:
-    # Setup an modified environment for our ssh command
-    ssh_env = os.environ.copy()
+    # Setup a modified environment for our awssh command
+    awssh_env = os.environ.copy()
     if credential_file:
-        ssh_env["AWS_SHARED_CREDENTIALS_FILE"] = str(credential_file)
+        awssh_env["AWS_SHARED_CREDENTIALS_FILE"] = str(credential_file)
     if region:
-        ssh_env["AWS_DEFAULT_REGION"] = str(region)
-    ssh_env["AWS_PROFILE"] = str(profile)
-    command = (
-        ["ssh"]
-        + [f"-o {key}={value}" for key, value in DEFAULT_SSH_OPTIONS.items()]
-        + ssh_args
-        + [instance_id]
-        + remote_command
-    )
+        awssh_env["AWS_DEFAULT_REGION"] = str(region)
+    awssh_env["AWS_PROFILE"] = str(profile)
+    if no_ssh:
+        command = (
+            ["aws", "ssm", "start-session"]
+            + ["--target", instance_id]
+            + ["--document-name", "SSM-SessionManagerRunShell"]
+        )
+    else:
+        command = (
+            ["ssh"]
+            + [f"-o {key}={value}" for key, value in DEFAULT_SSH_OPTIONS.items()]
+            + ssh_args
+            + [instance_id]
+            + remote_command
+        )
     if logging.getLogger().isEnabledFor(
         logging.DEBUG
     ):  # I like f-strings TODO: fix all these thangs
@@ -138,7 +148,7 @@ def _run_subprocess(
         logging.debug(f"command: {command}")
     completed_process = (
         subprocess.run(  # nosec: B603 subprocess input is carefully validated
-            args=command, env=ssh_env
+            args=command, env=awssh_env
         )
     )
     return completed_process.returncode
