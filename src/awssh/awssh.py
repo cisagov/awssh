@@ -138,14 +138,11 @@ def _run_subprocess(
             + [instance_id]
             + remote_command
         )
-    if logging.getLogger().isEnabledFor(
-        logging.DEBUG
-    ):  # I like f-strings TODO: fix all these thangs
-        logging.debug(
-            "environment: "
-            + str([f"{key}={os.environ[key]}" for key in sorted(os.environ)])
-        )
-        logging.debug(f"command: {command}")
+    if logging.getLogger().isEnabledFor(logging.DEBUG):
+        logging.debug("environment: ")
+        for key in sorted(os.environ):
+            logging.debug("%s=%s", key, os.environ[key])
+        logging.debug("command: %s", " ".join(i for i in command))
     completed_process = (
         subprocess.run(  # nosec: B603 subprocess input is carefully validated
             args=command, env=awssh_env
