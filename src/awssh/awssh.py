@@ -1,9 +1,7 @@
 """awssh simplifies secure shell connections over AWS simple systems manager.
 
-TODO: Describe tool usage.
-
 EXIT STATUS
-    This utility exits with the same status as the underlying ssh process:
+    This utility exits with the same status as the underlying aws or ssh process:
     0   No error.
     >0  An error occurred.
 
