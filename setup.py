@@ -77,12 +77,11 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.9",
     # What does your project relate to?
-    keywords="skeleton",
+    keywords="aws ssm ssh",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    # package_data={"example": ["data/*.txt"]},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
     install_requires=[
