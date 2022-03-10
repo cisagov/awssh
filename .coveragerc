@@ -2,7 +2,7 @@
 # https://coverage.readthedocs.io/en/latest/config.html
 
 [run]
-source = src/ssm_ssh
+source = src/awssh
 omit =
 branch = true
 

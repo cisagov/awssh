@@ -6,7 +6,7 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
-VERSION_FILE=src/ssm_ssh/_version.py
+VERSION_FILE=src/awssh/_version.py
 
 HELP_INFORMATION="bump_version.sh (show|major|minor|patch|prerelease|build|finalize)"
 
