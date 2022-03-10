@@ -74,7 +74,7 @@ def main() -> int:
     except SchemaError as err:
         # Exit because one or more of the arguments were invalid
         print(err, file=sys.stderr)
-        return 1
+        sys.exit(1)
 
     # Assign validated arguments to variables
     command: list[str] = validated_args["<command>"]
