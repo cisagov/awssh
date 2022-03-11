@@ -46,13 +46,13 @@ This project provides a tool that simplifies secure shell connections over
 
 ### Start a SSM shell session without ssh ###
 
-```bash
+```console
 awssh --no-ssh my-aws-startstopssmsession-profile i-01234567890abcdef
 ```
 
 ### Start a SSM shell session with ssh ###
 
-```bash
+```console
 awssh my-aws-startstopssmsession-profile i-01234567890abcdef
 ```
 
