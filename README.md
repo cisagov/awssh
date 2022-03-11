@@ -14,7 +14,7 @@ This project provides a tool that simplifies secure shell connections over
 
 - The [AWS CLI](https://aws.amazon.com/cli/) installed on your system.
 - A valid AWS profile that has permissions to start/stop SSM sessions.
-- A `bash` shell.
+- A [`bash`](https://www.gnu.org/software/bash/) shell.
 
 ## Usage ##
 
