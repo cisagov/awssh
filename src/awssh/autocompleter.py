@@ -321,11 +321,11 @@ def print_completions(comps: set[str], cur: str) -> None:
         print(i)
 
 
-def main() -> int:
+def main() -> None:
     """Execute main entry point for the awssh autocomplete script.
 
     Returns:
-        int: The exit code.
+        None
     """
     # bash exports COMP_LINE and COMP_POINT, tcsh COMMAND_LINE only
     command_line: str = (
@@ -343,4 +343,3 @@ def main() -> int:
         # If the user hits Ctrl+C, we don't want to print
         # a traceback to the user.
         pass
-    return 0
