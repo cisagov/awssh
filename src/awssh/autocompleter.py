@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """AWS SSH autocompleter script."""
 
 # Standard Python Libraries
