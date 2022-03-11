@@ -45,7 +45,7 @@ setup(
     name="awssh",
     # Versions should comply with PEP440
     version=get_version("src/awssh/_version.py"),
-    description="awssh tool",
+    description="A tool that simplifies secure shell connections over AWS Systems Manager",
     long_description=readme(),
     long_description_content_type="text/markdown",
     # Landing page for CISA's cybersecurity mission
