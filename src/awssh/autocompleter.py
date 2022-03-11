@@ -304,8 +304,8 @@ def print_completions(comps: set[str], cur: str) -> None:
         cur (str): The current word.
     """
     log(f"completions: {sorted(comps)}")
-    contains: list[str] = list()
-    starts: list[str] = list()
+    contains: list[str] = []
+    starts: list[str] = []
     for i in sorted(comps):
         if i.startswith(cur):
             starts.append(i)
