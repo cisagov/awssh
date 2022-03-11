@@ -63,23 +63,23 @@ def get_regions() -> set[str]:
     return set(session.get_available_regions("ec2"))
 
 
-def get_profiles(cred_filename: Path, filter: Optional[str] = None) -> set[str]:
+def get_profiles(cred_filename: Path, profile_filter: Optional[str] = None) -> set[str]:
     """Return a set of profiles within a credential file that match the filter.
 
     Args:
         cred_filename (Path): The path to the credential file.
-        filter (Optional[str], optional): Regular expression to match profile names. Defaults to None.
+        profile_filter (Optional[str], optional): Regular expression to match profile names. Defaults to None.
 
     Returns:
         set[str]: A set of profiles within a credential file that match the filter.
     """
-    if filter:
-        filter_re: re.Pattern[str] = re.compile(filter)
+    if profile_filter:
+        profile_filter_re: re.Pattern[str] = re.compile(profile_filter)
     config = configparser.ConfigParser()
     config.read(cred_filename)
     result: set[str] = set()
     for section in config.sections():
-        if not filter_re or filter_re.search(section):
+        if not profile_filter_re or profile_filter_re.search(section):
             result.add(section)
     return result
 
