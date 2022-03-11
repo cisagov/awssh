@@ -27,7 +27,7 @@ if os.environ.get("LC_CTYPE", "") == "UTF-8":
 # Set the environment below to a filename to enable logging.
 LOG_FILE: Optional[TextIO] = None
 if filename := os.environ.get("BASH_COMP_DEBUG_FILE"):
-    LOG_FILE = open(filename, "a")
+    LOG_FILE = open(filename, "a", encoding="utf-8")
 
 
 def log(message: str) -> None:
