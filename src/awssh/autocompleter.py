@@ -343,3 +343,7 @@ def main() -> None:
         # If the user hits Ctrl+C, we don't want to print
         # a traceback to the user.
         pass
+
+    # Close log file if it exists
+    if LOG_FILE:
+        LOG_FILE.close()
