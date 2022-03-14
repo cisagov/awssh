@@ -2,6 +2,7 @@
 
 # Standard Python Libraries
 import configparser
+from dataclasses import dataclass
 import os
 from pathlib import Path
 import re
@@ -147,19 +148,18 @@ def build_option_candidates(word_set: set[str]) -> set[str]:
     return candidates
 
 
-class ParsedState(object):
+@dataclass
+class ParsedState:
     """A class to hold the state of the command line parser."""
 
-    def __init__(self):
-        """Initialize the ParsedState object."""
-        self.aws_region: str = os.environ.get("AWS_REGION")
-        self.cred_file: Path = Path(
-            os.environ.get("AWS_SHARED_CREDENTIALS_FILE", DEFAULT_CREDENTIAL_FILE)
-        )
-        self.instance: str = None
-        self.profile: str = None  # os.environ.get("AWS_PROFILE")
-        self.ssh_args: str = None
-        self.ssh_command: list[str] = None
+    aws_region: Optional[str] = os.environ.get("AWS_REGION")
+    cred_file: Path = Path(
+        os.environ.get("AWS_SHARED_CREDENTIALS_FILE", DEFAULT_CREDENTIAL_FILE)
+    )
+    instance: Optional[str] = None
+    profile: Optional[str] = None
+    ssh_args: Optional[str] = None
+    ssh_command: Optional[list[str]] = None
 
 
 def parse_command_line(words: list[str]) -> ParsedState:
