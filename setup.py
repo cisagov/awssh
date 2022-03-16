@@ -86,15 +86,13 @@ setup(
     include_package_data=True,
     install_requires=[
         "boto3",
-        "boto3-stubs",
         "docopt",
         "schema",
         "setuptools >= 24.2.0",
-        "types-docopt",
-        "types-requests",
     ],
     extras_require={
         "test": [
+            "boto3-stubs",
             "coverage",
             # coveralls 1.11.0 added a service number for calls from
             # GitHub Actions. This caused a regression which resulted in a 422
@@ -106,6 +104,8 @@ setup(
             "pre-commit",
             "pytest-cov",
             "pytest",
+            "types-docopt",
+            "types-requests",
         ]
     },
     # Conveniently allows one to run the CLI tool as `awssh`
