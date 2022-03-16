@@ -109,7 +109,13 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
+          - boto3-stubs
+          - pytest-mypy
+          - types-docopt
+          - types-requests
           - types-setuptools
+        args:
+          - --scripts-are-modules
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.31.0
     hooks:
