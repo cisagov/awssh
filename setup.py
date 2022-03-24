@@ -106,6 +106,7 @@ setup(
             "pytest",
             "types-docopt",
             "types-requests",
+            "types-setuptools",
         ]
     },
     # Conveniently allows one to run the CLI tool as `awssh`
