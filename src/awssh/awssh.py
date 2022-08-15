@@ -25,6 +25,7 @@ Options:
 import logging
 import os
 from pathlib import Path
+import signal
 import subprocess  # nosec: B404 subprocess use is required for this tool
 import sys
 from typing import Any, Dict, Optional
@@ -144,9 +145,13 @@ def _run_subprocess(
         for key in sorted(os.environ):
             logging.debug("%s=%s", key, os.environ[key])
         logging.debug("command: %s", " ".join(i for i in command))
+    # Ignore interrupt signals and allow the child process to handle them
+    interrupt_action = signal.signal(signal.SIGINT, signal.SIG_IGN)
     completed_process = (
         subprocess.run(  # nosec: B603 subprocess input is carefully validated
             args=command, env=awssh_env
         )
     )
+    # Restore the interrupt signal handler to previous state
+    signal.signal(signal.SIGINT, interrupt_action)
     return completed_process.returncode
