@@ -18,6 +18,7 @@ CREDENTIALS_OPTIONS = {"--credentials", "-c"}
 HELP_OPTIONS = {"--help", "-h"}
 LOG_LEVEL_OPTIONS = {"--log-level"}
 LOG_LEVELS = {"debug", "info", "warning", "error", "critical"}
+NO_SSH_OPTIONS = {"--no-ssh", "-n"}
 REGION_OPTIONS = {"--region", "-r"}
 SSH_ARGS_OPTIONS = {"--ssh-args", "-s"}
 
@@ -141,6 +142,8 @@ def build_option_candidates(word_set: set[str]) -> set[str]:
         candidates |= CREDENTIALS_OPTIONS
     if not LOG_LEVEL_OPTIONS & word_set:
         candidates |= LOG_LEVEL_OPTIONS
+    if not NO_SSH_OPTIONS & word_set:
+        candidates |= NO_SSH_OPTIONS
     if not REGION_OPTIONS & word_set:
         candidates |= REGION_OPTIONS
     if not SSH_ARGS_OPTIONS & word_set:
