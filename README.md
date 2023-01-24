@@ -1,9 +1,8 @@
 # awssh ☁️🔒🐚 #
 
 [![GitHub Build Status](https://github.com/cisagov/awssh/workflows/build/badge.svg)](https://github.com/cisagov/awssh/actions)
+[![CodeQL](https://github.com/cisagov/awssh/workflows/CodeQL/badge.svg)](https://github.com/cisagov/awssh/actions/workflows/codeql-analysis.yml)
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/awssh/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/awssh?branch=develop)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/awssh.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/awssh/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/awssh.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/awssh/context:python)
 [![Known Vulnerabilities](https://snyk.io/test/github/cisagov/awssh/develop/badge.svg)](https://snyk.io/test/github/cisagov/awssh)
 
 This project provides a tool that simplifies secure shell connections over
