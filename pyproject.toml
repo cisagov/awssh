@@ -28,7 +28,7 @@ awssh = 'awssh.awssh:main'
 _awssh-completer = 'awssh.autocompleter:main'
 
 [tool.pytest.ini_options]
-addopts = -v -ra --cov
+addopts = "-v -ra --cov"
 
 [build-system]
 requires = ["poetry-core"]
