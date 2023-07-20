@@ -12,7 +12,8 @@ This project provides a tool that simplifies secure shell connections over
 ## Pre-requisites ##
 
 - The [AWS CLI](https://aws.amazon.com/cli/) installed on your system.
-- The [AWS SM plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html) installed on your system.
+- The [Session Manager plugin for the AWS CLI](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
+  installed on your system.
 - A valid AWS profile that has permissions to start/stop SSM sessions.
 - A [`bash`](https://www.gnu.org/software/bash/) shell.
 
