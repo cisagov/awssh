@@ -18,8 +18,8 @@
               boto3
               docopt
               schema
-              wheel
               setuptools
+              wheel
               ];
             src = (pkgs.fetchFromGitHub {
               owner = "cisagov";
