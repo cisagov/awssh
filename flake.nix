@@ -1,5 +1,5 @@
 {
-    description = "Tool to simplify secure shell connections over AWS simple systems manager.";
+    description = "Tool to simplify secure shell connections over AWS Systems Manager (SSM).";
 
     inputs = {
       nixpkgs.url = "github:NixOS/nixpkgs?ref=nixpkgs-unstable";
