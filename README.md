@@ -43,6 +43,26 @@ This project provides a tool that simplifies secure shell connections over
    tab completion that will make life a lot easier for you.  Don't say we
    didn't warn you.
 
+## Nix ###
+
+If you have [Nix](https://nixos.org/download.html) installed you can use
+the [flake.nix](flake.nix) configuration file located at the root of the
+project to build and run the `awssh`:
+
+```console
+nix build
+```
+
+After the build has completed the program will a `result` directory will
+appear within the root of the project. This directory contains a `bin`
+subdirectory where the executable `awssh` can be found: `result/bin/awssh`
+
+To run the program simply execute the binary from the project root:
+
+```console
+result/bin/awssh -h
+```
+
 ### Start a SSM shell session without ssh ###
 
 ```console
