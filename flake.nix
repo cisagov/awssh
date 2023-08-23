@@ -1,6 +1,6 @@
 {
     description = "Tool to simplify secure shell connections over AWS simple systems manager.";
-  
+
     inputs = {
       nixpkgs.url = "github:NixOS/nixpkgs?ref=nixpkgs-unstable";
       utils.url = "github:numtide/flake-utils";
@@ -20,13 +20,14 @@
               schema
               setuptools
               wheel
-              ];
+            ];
             src = (pkgs.fetchFromGitHub {
               owner = "cisagov";
               repo = "awssh";
               rev = "v1.1.0";
               sha256 = "sha256-4b2VBFUQye4wTvuagPwEImLwkUO4Dk5hvOYW+eg8OGA=";
-          });};
+            });
+          };
         in
           pkgs.python310Packages.buildPythonPackage rec {
             pname = "awssh";
@@ -36,11 +37,9 @@
               boto3
               docopt
               schema
-              wheel
               setuptools
+              wheel
             ];
           };
     };
   }
-  
-
