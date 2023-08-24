@@ -59,7 +59,7 @@ After the build has completed, the `awssh` executable can be found at:
 To run the program simply execute the binary from the project root:
 
 ```console
-result/bin/awssh -h
+result/bin/awssh --help
 ```
 
 ### Start a SSM shell session without ssh ###
