@@ -11,7 +11,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         awssh = pkgs.python310Packages.buildPythonPackage rec {
-          pname = "awssh";
+          name = "awssh";
           version = "1.1.0";
           doCheck = false;
           propagatedBuildInputs = with pkgs.python310Packages; [
@@ -24,13 +24,13 @@
           src = pkgs.fetchFromGitHub {
             owner = "cisagov";
             repo = "awssh";
-            rev = "v1.1.0";
-            sha256 = "sha256-4b2VBFUQye4wTvuagPwEImLwkUO4Dk5hvOYW+eg8OGA=";
+            rev = "v${version}";
+            hash = "sha256-4b2VBFUQye4wTvuagPwEImLwkUO4Dk5hvOYW+eg8OGA=";
           };
         };
       in {
         packages.default = pkgs.python310Packages.buildPythonPackage rec {
-          pname = "awssh";
+          name = "awssh";
           version = "1.1.0";
           src = ./.;
           propagatedBuildInputs = with pkgs.python310Packages; [
