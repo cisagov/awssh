@@ -3,13 +3,11 @@
 
     inputs = {
       nixpkgs.url = "github:NixOS/nixpkgs?ref=nixpkgs-unstable";
-      utils.url = "github:numtide/flake-utils";
+      flake-utils.url = "github:numtide/flake-utils";
     };
-    outputs = { self, nixpkgs, utils }: {
-      devShell = self.defaultPackage;
-      defaultPackage.x86_64-darwin =
-        with import nixpkgs { system = "x86_64-darwin"; };
-        let
+    outputs = { self, nixpkgs, flake-utils }:
+      flake-utils.lib.eachDefaultSystem (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
           awssh = pkgs.python310Packages.buildPythonPackage rec {
             pname = "awssh";
             version = "1.1.0";
@@ -21,15 +19,15 @@
               setuptools
               wheel
             ];
-            src = (pkgs.fetchFromGitHub {
+            src = pkgs.fetchFromGitHub {
               owner = "cisagov";
               repo = "awssh";
               rev = "v1.1.0";
               sha256 = "sha256-4b2VBFUQye4wTvuagPwEImLwkUO4Dk5hvOYW+eg8OGA=";
-            });
-          };
-        in
-          pkgs.python310Packages.buildPythonPackage rec {
+             };
+            };
+          in {
+          packages.default = pkgs.python310Packages.buildPythonPackage rec {
             pname = "awssh";
             version = "1.1.0";
             src = ./.;
@@ -39,7 +37,7 @@
               schema
               setuptools
               wheel
-            ];
-          };
-    };
-  }
+        ];
+      };
+    });
+}
