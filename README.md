@@ -47,7 +47,7 @@ This project provides a tool that simplifies secure shell connections over
 
 If you have [Nix](https://nixos.org/download.html) installed you can use
 the [flake.nix](flake.nix) configuration file located at the root of the
-project to build and run the `awssh`:
+project to build and run `awssh`:
 
 ```console
 nix build
