@@ -53,9 +53,8 @@ project to build and run `awssh`:
 nix build
 ```
 
-After the build has completed the program will a `result` directory will
-appear within the root of the project. This directory contains a `bin`
-subdirectory where the executable `awssh` can be found: `result/bin/awssh`
+After the build has completed, the `awssh` executable can be found at:
+`result/bin/awssh`
 
 To run the program simply execute the binary from the project root:
 
