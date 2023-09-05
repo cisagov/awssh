@@ -34,8 +34,7 @@ else
       mv $tmp_file $FLAKE_FILE
       # Run flake update to update the flake.lock file
       nix flake update
-      git add $FLAKE_FILE $FLAKE_LOCK_FILE
-      git add $VERSION_FILE
+      git add $FLAKE_FILE $FLAKE_LOCK_FILE $VERSION_FILE
       git commit -m"Bump version from $old_version to $new_version"
       git push
       ;;
