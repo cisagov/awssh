@@ -8,3 +8,7 @@
 # These folks own any files in the .github directory at the root of
 # the repository and any of its subdirectories.
 /.github/ @dav3r @felddy @jasonodoom @jsf9k @mcdonnnj
+
+# Our Nix and flake expert(s) own these files.
+*.nix @jasonodoom
+flake.* @jasonodoom
