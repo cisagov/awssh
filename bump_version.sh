@@ -6,6 +6,8 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
+FLAKE_FILE=flake.nix
+FLAKE_LOCK_FILE=flake.lock
 VERSION_FILE=src/awssh/_version.py
 
 HELP_INFORMATION="bump_version.sh (show|major|minor|patch|prerelease|build|finalize)"
@@ -26,7 +28,10 @@ else
       # as a result of macOS using the BSD version of sed
       tmp_file=/tmp/version.$$
       sed "s/$old_version_regex/$new_version/" $VERSION_FILE > $tmp_file
-      mv $tmp_file $VERSION_FILE
+      sed "s/$old_version_regex/$new_version/" $FLAKE_FILE
+      # Run flake update to update the flake.lock file
+      nix flake update
+      git add $FLAKE_FILE $FLAKE_LOCK_FILE
       git add $VERSION_FILE
       git commit -m"Bump version from $old_version to $new_version"
       git push
