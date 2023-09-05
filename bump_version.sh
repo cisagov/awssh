@@ -28,6 +28,7 @@ else
       # as a result of macOS using the BSD version of sed
       tmp_file=/tmp/version.$$
       sed "s/$old_version_regex/$new_version/" $VERSION_FILE > $tmp_file
+      mv $tmp_file $VERSION_FILE
       sed "s/$old_version_regex/$new_version/" > $FLAKE_FILE
       # Run flake update to update the flake.lock file
       nix flake update
