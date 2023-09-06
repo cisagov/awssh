@@ -89,6 +89,13 @@ your `awssh` command:
   when you tab complete, the name will be transformed into the instance ID
   (assuming you have typed enough of the name to identify a unique instance).
 
+## Special development pre-requisites ##
+
+> [!Note]
+> This project supports installation via a [Nix](https://nixos.org/)
+> [`flake.nix`](https://nixos.wiki/wiki/Flakes) file, and as a result
+> the `bump_version.sh` script requires that Nix be installed locally.
+
 ## Contributing ##
 
 We welcome contributions!  Please see [`CONTRIBUTING.md`](CONTRIBUTING.md) for
