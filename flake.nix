@@ -28,7 +28,8 @@
             hash = "sha256-4b2VBFUQye4wTvuagPwEImLwkUO4Dk5hvOYW+eg8OGA=";
           };
         };
-      in {
+      in
+      {
         packages.default = pkgs.python310Packages.buildPythonPackage rec {
           name = "awssh";
           version = "1.1.0";
