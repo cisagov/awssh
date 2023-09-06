@@ -2,6 +2,8 @@
 
 # bump_version.sh (show|major|minor|patch|prerelease|build)
 
+# The nix commands used in this file require the installation of Nix: https://nixos.org
+
 set -o nounset
 set -o errexit
 set -o pipefail
