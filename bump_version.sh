@@ -51,7 +51,7 @@ else
       mv $tmp_file $VERSION_FILE
       sed "s/$old_version_regex/$new_version/" $FLAKE_FILE > $tmp_flake
       mv $tmp_flake $FLAKE_FILE
-      git add $FLAKE_FILE $FLAKE_LOCK_FILE $VERSION_FILE
+      git add $FLAKE_FILE $VERSION_FILE
       git commit -m"Finalize version from $old_version to $new_version"
       git push
       ;;
