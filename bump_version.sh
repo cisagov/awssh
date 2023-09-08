@@ -2,10 +2,14 @@
 
 # bump_version.sh (show|major|minor|patch|prerelease|build)
 
+# The nix commands used in this file require the installation of Nix: https://nixos.org
+
 set -o nounset
 set -o errexit
 set -o pipefail
 
+FLAKE_FILE=flake.nix
+FLAKE_LOCK_FILE=flake.lock
 VERSION_FILE=src/awssh/_version.py
 
 HELP_INFORMATION="bump_version.sh (show|major|minor|patch|prerelease|build|finalize)"
@@ -25,9 +29,14 @@ else
       # A temp file is used to provide compatability with macOS development
       # as a result of macOS using the BSD version of sed
       tmp_file=/tmp/version.$$
+      tmp_flake=/tmp/flake.tmp
       sed "s/$old_version_regex/$new_version/" $VERSION_FILE > $tmp_file
       mv $tmp_file $VERSION_FILE
-      git add $VERSION_FILE
+      sed "s/$old_version_regex/$new_version/" $FLAKE_FILE > $tmp_flake
+      mv $tmp_flake $FLAKE_FILE
+      # Run flake update to update the flake.lock file
+      nix flake update
+      git add $FLAKE_FILE $FLAKE_LOCK_FILE $VERSION_FILE
       git commit -m"Bump version from $old_version to $new_version"
       git push
       ;;
@@ -37,9 +46,12 @@ else
       # A temp file is used to provide compatability with macOS development
       # as a result of macOS using the BSD version of sed
       tmp_file=/tmp/version.$$
+      tmp_flake=/tmp/flake.tmp
       sed "s/$old_version_regex/$new_version/" $VERSION_FILE > $tmp_file
       mv $tmp_file $VERSION_FILE
-      git add $VERSION_FILE
+      sed "s/$old_version_regex/$new_version/" $FLAKE_FILE > $tmp_flake
+      mv $tmp_flake $FLAKE_FILE
+      git add $FLAKE_FILE $VERSION_FILE
       git commit -m"Finalize version from $old_version to $new_version"
       git push
       ;;
