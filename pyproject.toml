@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "awssh"
+version = "1.1.0"
+description = "A tool that simplifies secure shell connections over AWS Systems Manager"
+authors = ["Cybersecurity and Infrastructure Security Agency"]
+license = "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+boto3 = "^1.28.6"
+docopt = "^0.6.2"
+schema = "^0.7.5"
+
+[tool.poetry.group.dev.dependencies]
+boto3-stubs = "^1.28.5"
+coverage = "^7.2.7"
+coveralls = "!= 1.11.0"
+pre-commit = "^3.3.3"
+pytest-cov = "^4.1.0"
+pytest = "^7.4.0"
+types-docopt = "^0.6.11.3"
+types-requests = "^2.31.0.1"
+
+
+[tool.poetry.scripts]
+awssh = 'awssh.awssh:main'
+_awssh-completer = 'awssh.autocompleter:main'
+
+[tool.pytest.ini_options]
+addopts = "-v -ra --cov"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
