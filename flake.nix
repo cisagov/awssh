@@ -12,7 +12,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
         awssh = pkgs.python310Packages.buildPythonPackage rec {
           name = "awssh";
-          version = "1.1.0";
+          version = "1.1.1";
           doCheck = false;
           propagatedBuildInputs = with pkgs.python310Packages; [
             boto3
@@ -32,7 +32,7 @@
       {
         packages.default = pkgs.python310Packages.buildPythonPackage rec {
           name = "awssh";
-          version = "1.1.0";
+          version = "1.1.1";
           src = ./.;
           propagatedBuildInputs = with pkgs.python310Packages; [
             boto3
