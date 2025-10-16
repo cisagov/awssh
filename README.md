@@ -3,7 +3,6 @@
 [![GitHub Build Status](https://github.com/cisagov/awssh/workflows/build/badge.svg)](https://github.com/cisagov/awssh/actions)
 [![CodeQL](https://github.com/cisagov/awssh/workflows/CodeQL/badge.svg)](https://github.com/cisagov/awssh/actions/workflows/codeql-analysis.yml)
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/awssh/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/awssh?branch=develop)
-[![Known Vulnerabilities](https://snyk.io/test/github/cisagov/awssh/develop/badge.svg)](https://snyk.io/test/github/cisagov/awssh)
 
 This project provides a tool that simplifies secure shell connections over
 [AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html)
