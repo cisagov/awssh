@@ -27,7 +27,7 @@ from pathlib import Path
 import signal
 import subprocess  # nosec: B404 subprocess use is required for this tool
 import sys
-from typing import Any, Dict, Optional
+from typing import Any
 
 # Third-Party Libraries
 import docopt
@@ -53,7 +53,7 @@ DEFAULT_SSH_OPTIONS = {
 
 def main() -> int:
     """Set up logging and prepare and SSM/ssh command."""
-    args: Dict[str, str] = docopt.docopt(__doc__, version=__version__)
+    args: dict[str, str] = docopt.docopt(__doc__, version=__version__)
 
     # Validate and convert arguments as needed
     schema: Schema = Schema(
@@ -70,7 +70,7 @@ def main() -> int:
     )
 
     try:
-        validated_args: Dict[str, Any] = schema.validate(args)
+        validated_args: dict[str, Any] = schema.validate(args)
     except SchemaError as err:
         # Exit because one or more of the arguments were invalid
         print(err, file=sys.stderr)
@@ -78,7 +78,7 @@ def main() -> int:
 
     # Assign validated arguments to variables
     command: list[str] = validated_args["<command>"]
-    credential_file: Optional[Path] = None
+    credential_file: Path | None = None
     if validated_args["--credentials"]:
         credential_file = CREDENTIAL_DIR / Path(validated_args["--credentials"])
     instance_id: str = validated_args["<instance-id>"]
@@ -110,9 +110,9 @@ def main() -> int:
 
 
 def _run_subprocess(
-    credential_file: Optional[Path],
+    credential_file: Path | None,
     profile: str,
-    region: Optional[str],
+    region: str | None,
     instance_id: str,
     no_ssh: bool,
     ssh_args: list[str],
