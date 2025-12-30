@@ -175,8 +175,6 @@ repos:
           - pytest-mypy
           - types-boto3
           - types-docopt
-        args:
-          - --scripts-are-modules
   - repo: https://github.com/pypa/pip-audit
     rev: v2.9.0
     hooks:
