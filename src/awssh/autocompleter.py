@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 import re
 import shlex
-from typing import Optional, TextIO
+from typing import TextIO
 
 # Third-Party Libraries
 import boto3
@@ -27,7 +27,7 @@ if os.environ.get("LC_CTYPE", "") == "UTF-8":
 
 # Debugging the completer can be touchy since standard out goes to bash.
 # Set the environment below to a filename to enable logging.
-LOG_FILE: Optional[TextIO] = None
+LOG_FILE: TextIO | None = None
 if filename := os.environ.get("BASH_COMP_DEBUG_FILE"):
     LOG_FILE = open(filename, "a", encoding="utf-8")
 
@@ -65,7 +65,7 @@ def get_regions() -> set[str]:
     return set(session.get_available_regions("ec2"))
 
 
-def get_profiles(cred_filename: Path, profile_filter: Optional[str] = None) -> set[str]:
+def get_profiles(cred_filename: Path, profile_filter: str | None = None) -> set[str]:
     """Return a set of profiles within a credential file that match the filter.
 
     Args:
@@ -155,14 +155,14 @@ def build_option_candidates(word_set: set[str]) -> set[str]:
 class ParsedState:
     """A class to hold the state of the command line parser."""
 
-    aws_region: Optional[str] = os.environ.get("AWS_REGION")
+    aws_region: str | None = os.environ.get("AWS_REGION")
     cred_file: Path = Path(
         os.environ.get("AWS_SHARED_CREDENTIALS_FILE", DEFAULT_CREDENTIAL_FILE)
     )
-    instance: Optional[str] = None
-    profile: Optional[str] = None
-    ssh_args: Optional[str] = None
-    ssh_command: Optional[list[str]] = None
+    instance: str | None = None
+    profile: str | None = None
+    ssh_args: str | None = None
+    ssh_command: list[str] | None = None
 
 
 def parse_command_line(words: list[str]) -> ParsedState:
