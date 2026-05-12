@@ -70,7 +70,8 @@ def get_profiles(cred_filename: Path, profile_filter: str | None = None) -> set[
 
     Args:
         cred_filename (Path): The path to the credential file.
-        profile_filter (Optional[str], optional): Regular expression to match profile names. Defaults to None.
+        profile_filter (Optional[str], optional): Regular expression
+        to match profile names. Defaults to None.
 
     Returns:
         set[str]: A set of profiles within a credential file that match the filter.
@@ -97,7 +98,8 @@ def get_instances(
         region (str): The AWS region to use.
 
     Returns:
-        set[tuple[str, str]]: A set of instances and names that match the profile and region.
+        set[tuple[str, str]]: A set of instances and names that match
+        the profile and region.
     """
     # Create session
     # boto3 doesn't have a programatic way to set the credential file. yuck.
@@ -204,14 +206,15 @@ def parse_command_line(words: list[str]) -> ParsedState:
 def process_command_line(
     command_line: str, command_index: int
 ) -> tuple[list[str], str, str]:
-    """Process the command line and return the command line words, the command, and the command index.
+    """Process the command line and return the words, command, and command index.
 
     Args:
         command_line (str): The command line to process.
         command_index (int): The index of the current command in the command line.
 
     Returns:
-        tuple[list[str], str, str]: The command line words, the command, and the command index.
+        tuple[list[str], str, str]: The command line words, the
+        command, and the command index.
     """
     # Chop the command line at the current cursor location
     command_line = command_line[:command_index]
@@ -229,7 +232,7 @@ def process_command_line(
 
 
 def autocomplete(command_line: str, command_index: int) -> tuple[set[str], str]:
-    """Autocomplete the command line and return the autocomplete set and the current word.
+    """Autocomplete the command line.
 
     Args:
         command_line (str): The command line to autocomplete.
