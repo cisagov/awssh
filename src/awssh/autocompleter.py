@@ -214,7 +214,7 @@ def process_command_line(
 
     Returns:
         tuple[list[str], str, str]: The command line words, the
-        command, and the command index.
+        current command, and the previous command.
     """
     # Chop the command line at the current cursor location
     command_line = command_line[:command_index]
