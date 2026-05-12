@@ -70,8 +70,8 @@ def get_profiles(cred_filename: Path, profile_filter: str | None = None) -> set[
 
     Args:
         cred_filename (Path): The path to the credential file.
-        profile_filter (Optional[str], optional): Regular expression
-        to match profile names. Defaults to None.
+        profile_filter (str | None, optional): Regular expression
+            to match profile names. Defaults to None.
 
     Returns:
         set[str]: A set of profiles within a credential file that match the filter.
@@ -99,7 +99,7 @@ def get_instances(
 
     Returns:
         set[tuple[str, str]]: A set of instances and names that match
-        the profile and region.
+                              the profile and region.
     """
     # Create session
     # boto3 doesn't have a programatic way to set the credential file. yuck.
