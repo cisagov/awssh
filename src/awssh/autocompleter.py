@@ -76,8 +76,9 @@ def get_profiles(cred_filename: Path, profile_filter: str | None = None) -> set[
     Returns:
         set[str]: A set of profiles within a credential file that match the filter.
     """
+    profile_filter_re: re.Pattern[str] | None = None
     if profile_filter:
-        profile_filter_re: re.Pattern[str] = re.compile(profile_filter)
+        profile_filter_re = re.compile(profile_filter)
     config = configparser.ConfigParser()
     config.read(cred_filename)
     result: set[str] = set()
