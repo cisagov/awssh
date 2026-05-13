@@ -45,7 +45,10 @@ from ._version import __version__
 DEFAULT_SSH_OPTIONS = {
     "GSSAPIAuthentication": "yes",
     "GSSAPIDelegateCredentials": "yes",
-    "ProxyCommand": """sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'" """,
+    "ProxyCommand": (
+        'sh -c "aws ssm start-session --target %h --document-name '
+        "AWS-StartSSHSession --parameters 'portNumber=%p'\" "
+    ),
     "StrictHostKeyChecking": "no",
     "UserKnownHostsFile": "/dev/null",
 }
