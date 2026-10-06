@@ -107,7 +107,7 @@ def get_instances(
     os.environ["AWS_SHARED_CREDENTIALS_FILE"] = str(credential_file)
     session = boto3.session.Session(region_name=region, profile_name=profile)
     ec2 = session.resource("ec2")
-    instances = {}
+    result: set[tuple[str, str]] = set()
     # Loop through instances that are running
     for i in ec2.instances.filter(
         Filters=[{"Name": "instance-state-name", "Values": ["running"]}]
@@ -116,14 +116,11 @@ def get_instances(
         if i.tags is None:
             # if an instance has no tags use the id as the Name
             log(f"warning: instance does not have tags: {i}")
-            i.tag_dict = {"Name": i.id}
+            tag_dict = {}
         else:
-            i.tag_dict = {tag["Key"]: tag["Value"] for tag in i.tags}
-        instances[i.tag_dict["Name"]] = i
-
-    result: set[tuple[str, str]] = set()
-    for name, instance in instances.items():
-        result.add((instance.id, name))
+            tag_dict = {tag["Key"]: tag["Value"] for tag in i.tags}
+        # Name tags are optional and need not be unique across instances.
+        result.add((i.id, tag_dict.get("Name", i.id)))
     return result
 
 
